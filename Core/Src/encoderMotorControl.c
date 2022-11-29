@@ -33,7 +33,7 @@ void calculate_encoder_data(Encoder_Struct *const e){ //parse struct pointer int
     else{ // general case
       e->dstep = e->cnt_current - e->cnt_prev;
       e->dir = (e->dstep > 0) ? DIR_FORWARD : DIR_REVERSE; //update dir
-      e->w_speed = (((float)e->dstep / ENT_CNT_PER_REV) / ENC_DT) * 60.0f * MOTOR_GEARRATIO; //angular speed in RPM
+      e->w_speed = (((float)e->dstep / ENT_CNT_PER_REV) / ENC_DT) * 60.0f; //* MOTOR_GEARRATIO; //angular speed in RPM
     }
   }
   e->cnt_prev = e->cnt_current; //update cnt_prev counter.

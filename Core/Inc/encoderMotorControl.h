@@ -32,7 +32,7 @@
 #define CNT_DIR_CW 1
 #define CNT_DIR_CCW -1
 
-#define ENC_DT 0.01 // 10 ms (100 Hz)
+#define ENC_DT 0.015 // 15 ms (100 Hz)
 #define ENC_DSTEP_MAX 30000
 #define CTRL_DT 0.01
 
