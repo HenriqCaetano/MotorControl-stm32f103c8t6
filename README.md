@@ -3,10 +3,10 @@ Codes developed for the control of a DC motor using encoders, a STM32f103c8t6 an
 
 
 The initial page is the entire project. The most important files are:
-  -main.c: core->Src
-  -encoderMotorcontrol.c: core->Src
-  -encoderMotorcontrol.h: core->Inc
-  -gpio.c, tim.c, usart.c: core->Src
+-main.c: core->Src
+-encoderMotorcontrol.c: core->Src
+-encoderMotorcontrol.h: core->Inc
+-gpio.c, tim.c, usart.c: core->Src
   
   
   Thank you!
