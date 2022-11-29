@@ -1,0 +1,8 @@
+../Core/Src/encoderMotorControl.c:19:6:calculate_encoder_data	16	static
+../Core/Src/encoderMotorControl.c:49:6:drv_set_dutycycle	24	static
+../Core/Src/encoderMotorControl.c:71:6:drv_set_enable_toggle	24	static
+../Core/Src/encoderMotorControl.c:77:6:drv_set_enable	24	static
+../Core/Src/encoderMotorControl.c:82:6:drv_set_disable	24	static
+../Core/Src/encoderMotorControl.c:94:6:update_controller_I	40	static
+../Core/Src/encoderMotorControl.c:114:6:update_controller_PI	32	static
+../Core/Src/encoderMotorControl.c:133:7:ctrlSpeed_to_dutyCycle	24	static
