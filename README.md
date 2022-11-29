@@ -1,12 +1,16 @@
 # MotorControl-stm32f103c8t6
-Codes developed for the control of a DC motor using encoders, a STM32f103c8t6 and a MD22 motor driver. This code is still in development. 
+<p>Codes developed for the control of a DC motor using encoders, a STM32f103c8t6 and a MD22 motor driver. This code is still in development.</p> 
 
 
-The initial page is the entire project. The most important files are:
--main.c: core->Src
--encoderMotorcontrol.c: core->Src
--encoderMotorcontrol.h: core->Inc
--gpio.c, tim.c, usart.c: core->Src
+<h2>The initial page is the entire project. The most important files are:</h2>
+
+<ul>
+  <li>main.c: core->Src</li>
+  <li>encoderMotorcontrol.c: core->Src</li>
+  <li>encoderMotorcontrol.h: core->Inc</li>
+  <li>gpio.c, tim.c, usart.c: core->Src</li>
   
   
-  Thank you!
+</ul>
+
+<h1>Thank you!</h1>
