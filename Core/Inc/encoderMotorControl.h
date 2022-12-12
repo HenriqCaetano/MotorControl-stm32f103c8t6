@@ -116,7 +116,14 @@ void update_controller_I(Controller_I_Struct *const c, float Vd, float Vm, float
   * @brief          : Speed PI Controller (Joseph A.)
   ******************************************************************************
 **/
-
+/*	@properties
+ * kp: proportional gain
+ * ki: integral gain
+ * e[1]: most recent error
+ * e[0]: least recent error
+ * u[1]: current controller output
+ * u[0]: past controller output
+ */
 typedef struct{
   float kp; //assign as variable instead of #define as pre-compile for on-board adjusting purpose
   float ki; //assign as variable instead of #define as pre-compile for on-board adjusting purpose
@@ -128,7 +135,9 @@ typedef struct{
   float cum_error_I_MAX_BOUND; // max forward I term (yy.yyyy)
 } Controller_PI_Struct;
 
-void update_controller_PI(Controller_PI_Struct *const c, float Vd, float Vm, float *const Vc); //Vd = set value, Vm = feedback (measured value), Vc = value for controlling as input
+//Vd = set value, Vm = feedback (measured value), Vc = value for controlling as input
+void update_controller_PI(Controller_PI_Struct *const c, float Vd, float Vm, float *const Vc);
+
 float ctrlSpeed_to_dutyCycle(float Vc);
 
 #endif //TAWAN_JOSEPH_ENCODER_DRIVE_H

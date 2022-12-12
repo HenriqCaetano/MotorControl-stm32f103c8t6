@@ -111,7 +111,8 @@ void update_controller_I(Controller_I_Struct *const c, float Vd, float Vm, float
   ******************************************************************************
 **/
 
-void update_controller_PI(Controller_PI_Struct *const c, float Vd, float Vm, float *const Vc) //Vd = set value, Vm = feedback (measured value), Vc = value for controlling as input
+//Vd = set value, Vm = feedback (measured value), Vc = value for controlling as input
+void update_controller_PI(Controller_PI_Struct *const c, float Vd, float Vm, float *const Vc)
 {
   if (c->flag_init)
   {
@@ -120,6 +121,7 @@ void update_controller_PI(Controller_PI_Struct *const c, float Vd, float Vm, flo
     c->u[0] = 0;
     c->flag_init = 0;
   }
+
   c->u[1] = (c->ki+c->kp)*c->e[1] - c->kp*c->e[0] + c->u[0];
   if (ABS(c->e[1]) >= c->acceptable_err_band) //acceptable error
     *Vc = c->u[1];
