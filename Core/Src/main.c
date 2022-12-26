@@ -18,6 +18,7 @@
 /* USER CODE END Header */
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
+#include "i2c.h"
 #include "tim.h"
 #include "usart.h"
 #include "gpio.h"
@@ -25,7 +26,7 @@
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 #include <stdio.h>
-#include "encoderMotorControl.h"
+#include "motorControl.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -35,6 +36,15 @@
 
 /* Private define ------------------------------------------------------------*/
 /* USER CODE BEGIN PD */
+#define kp 10.0f
+#define ki 10.0f
+
+#define limMin -10.0f
+#define limMax 10.0f
+#define limMinInt -5.0f
+#define limMaxInt 5.0f
+
+#define sampleTime 0.01f
 /* USER CODE END PD */
 
 /* Private macro -------------------------------------------------------------*/
@@ -45,7 +55,21 @@
 /* Private variables ---------------------------------------------------------*/
 
 /* USER CODE BEGIN PV */
-Encoder_Struct encoder;
+Encoder_Struct encoder = {&htim2};
+PIController controller = {
+		&encoder,
+		kp,ki,
+		limMin, limMax,
+		limMinInt,limMaxInt,
+		sampleTime
+};
+
+static const uint8_t drv_Addr = 0xB0; //address to write in md22 driver
+static uint8_t speedRegisterFirstMotor = 0x01; // address for the first motor
+//static const uint8_t speedRegisterSecondMotor = 0x02; //address for the second motor
+
+HAL_StatusTypeDef check;
+uint8_t writeValue = 0x00;
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -57,9 +81,37 @@ int _write(int fd, char* ptr, int len) {
 }
 
 void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef* htim){
-    encoder.cnt_current = TIM2->CNT;
-    calculate_encoder_data(&encoder);
-    printf("SPEED: %.2f, dStep: %d\r\n", encoder.w_speed, encoder.dstep);
+	/*
+	 * ALGORITMO
+	 * ENCODER OBTEM VELOCIDADE MEDIDA
+	 * PID REALIZA CÁLCULOS E OBTÉM VELOCIDADE QUE DEVE SER DESENOLVIDA
+	 * SAIDA DO PID CONTROLA PWM DO TIMER (SERÁ NECESSÁRIO?)
+	 * SAIDA CONTROLA QUAL VALOR MANDAR PARA MD22 VIA I2C
+	 * I2C: 0 - FULL REVERSE; 128 - STOP; 255 - FULL FORWARD;
+	 *
+	 */
+
+	//this function updates the pi controller with the current encoder reading
+    PIController_Update(&controller, 20.0f);
+
+    writeValue = convertsPiOutputToDriverInput(&controller);
+
+    /*REALIZAR CONVERSÃO VELOCIDADE -> BYTE*/
+
+    check = HAL_I2C_Master_Transmit(&hi2c1, drv_Addr, &speedRegisterFirstMotor, 1, HAL_MAX_DELAY);
+    if(check != HAL_OK){
+    	printf("Shit\n\r");
+    }
+    else{
+    	//with the register acessed, write the new value (byte from converted speed)
+    	//HAL_I2C_Master_Transmit(&hi2c, drv_Addr, pData, 1, HAL_MAX_DELAY);
+    	printf("DEU CERTO");
+    }
+
+
+    //HAL_I2C_Master_Transmit(hi2c, DevAddress, pData, Size, Timeout)
+
+    printf("SPEED: %.2f, dStep: %d\r\n", encoder.w_speed, encoder.step);
 
 }
 /* USER CODE END PFP */
@@ -98,9 +150,13 @@ int main(void)
   MX_USART1_UART_Init();
   MX_TIM2_Init();
   MX_TIM1_Init();
+  MX_I2C1_Init();
   /* USER CODE BEGIN 2 */
   HAL_TIM_Encoder_Start(&htim2, TIM_CHANNEL_ALL);//start encoder timer
   HAL_TIM_Base_Start_IT(&htim1);//start interrupt timer
+  HAL_I2C_Init(&hi2c1);//to be used by i2c
+
+  PIController_Init(&controller);
   /* USER CODE END 2 */
 
   /* Infinite loop */
