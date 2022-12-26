@@ -133,14 +133,3 @@ uint8_t convertsPiOutputToDriverInput(const PIController* pid){
 	}
 	return outCome;
 }
-
-
-
-
-
-
-
-
-
-
-

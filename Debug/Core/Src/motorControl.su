@@ -6,4 +6,4 @@
 ../Core/Src/motorControl.c:72:6:drv_set_disable	24	static
 ../Core/Src/motorControl.c:79:6:PIController_Init	16	static
 ../Core/Src/motorControl.c:88:7:PIController_Update	32	static
-../Core/Src/motorControl.c:121:9:convertsPiOutputToDriverInput	24	static
+../Core/Src/motorControl.c:125:9:convertsPiOutputToDriverInput	24	static
