@@ -45,7 +45,7 @@ typedef enum
 /*============ ENCODER STRUCTURE ============*/ 
 typedef struct{
 
-	TIM_HandleTypeDef* timer;
+	TIM_HandleTypeDef* timer; //timer in encoder mode
 	uint16_t cnt_current; //current encoder counter
 	uint16_t cnt_prev; //previous encoder counter
 	Dir_1D_Enum dir; //direction of movement

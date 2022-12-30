@@ -36,15 +36,16 @@
 
 /* Private define ------------------------------------------------------------*/
 /* USER CODE BEGIN PD */
-#define kp 10.0f
-#define ki 10.0f
+//todo: make a test with an actual motor
+#define kp 1.0f
+#define ki 1.0f
 
 #define limMin -10.0f
 #define limMax 10.0f
 #define limMinInt -5.0f
 #define limMaxInt 5.0f
 
-#define sampleTime 0.01f
+#define sampleTime 0.015f
 /* USER CODE END PD */
 
 /* Private macro -------------------------------------------------------------*/
@@ -63,9 +64,10 @@ PIController controller = {
 		limMinInt,limMaxInt,
 		sampleTime
 };
+/*Those variables will be used to communicate with the motor driver*/
 
-static const uint8_t drv_Addr = 0xB0; //address to write in md22 driver
-static uint8_t speedRegisterFirstMotor = 0x01; // address for the first motor
+//static const uint8_t drv_Addr = 0xB0; //address to write in md22 driver
+//static uint8_t speedRegisterFirstMotor = 0x01; // address for the first motor
 //static const uint8_t speedRegisterSecondMotor = 0x02; //address for the second motor
 
 HAL_StatusTypeDef check;
@@ -94,24 +96,22 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef* htim){
 	//this function updates the pi controller with the current encoder reading
     PIController_Update(&controller, 20.0f);
 
-    writeValue = convertsPiOutputToDriverInput(&controller);
+    printf("ENCODER SPEED: %.2f\r\n", encoder.w_speed);
+    printf("ERRO: %.2f INTEGRADOR: %.2f SAIDA: %.2f \r\n", controller.prevError, controller.integrator, controller.out);
 
-    /*REALIZAR CONVERSÃO VELOCIDADE -> BYTE*/
-
-    check = HAL_I2C_Master_Transmit(&hi2c1, drv_Addr, &speedRegisterFirstMotor, 1, HAL_MAX_DELAY);
-    if(check != HAL_OK){
-    	printf("Shit\n\r");
-    }
-    else{
-    	//with the register acessed, write the new value (byte from converted speed)
-    	//HAL_I2C_Master_Transmit(&hi2c, drv_Addr, pData, 1, HAL_MAX_DELAY);
-    	printf("DEU CERTO");
-    }
-
-
-    //HAL_I2C_Master_Transmit(hi2c, DevAddress, pData, Size, Timeout)
-
-    printf("SPEED: %.2f, dStep: %d\r\n", encoder.w_speed, encoder.step);
+//    /*REALIZAR CONVERSÃO VELOCIDADE -> BYTE*/
+//    writeValue = convertsPiOutputToDriverInput(&controller);
+//    //access driver "speed register" to change its value
+//    check = HAL_I2C_Master_Transmit(&hi2c1, drv_Addr, &speedRegisterFirstMotor, 1, HAL_MAX_DELAY);
+//
+//    if(check != HAL_OK){
+//    	printf("HOLY SHIT\n\r");
+//    }
+//    else{
+//    	//with the register acessed, write the new value (byte from converted speed)
+//    	HAL_I2C_Master_Transmit(&hi2c1, drv_Addr, &writeValue, 1, HAL_MAX_DELAY);
+//    	printf("NICE");
+//    }
 
 }
 /* USER CODE END PFP */
