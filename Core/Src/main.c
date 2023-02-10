@@ -100,18 +100,18 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef* htim){
     printf("ERRO: %.2f INTEGRADOR: %.2f SAIDA: %.2f \r\n", controller.prevError, controller.integrator, controller.out);
 
 //    /*REALIZAR CONVERSÃO VELOCIDADE -> BYTE*/
-//    writeValue = convertsPiOutputToDriverInput(&controller);
-//    //access driver "speed register" to change its value
-//    check = HAL_I2C_Master_Transmit(&hi2c1, drv_Addr, &speedRegisterFirstMotor, 1, HAL_MAX_DELAY);
-//
-//    if(check != HAL_OK){
-//    	printf("HOLY SHIT\n\r");
-//    }
-//    else{
-//    	//with the register acessed, write the new value (byte from converted speed)
-//    	HAL_I2C_Master_Transmit(&hi2c1, drv_Addr, &writeValue, 1, HAL_MAX_DELAY);
-//    	printf("NICE");
-//    }
+    writeValue = convertsPiOutputToDriverInput(&controller);
+    //access driver "speed register" to change its value
+    check = HAL_I2C_Master_Transmit(&hi2c1, drv_Addr, &speedRegisterFirstMotor, 1, HAL_MAX_DELAY);
+
+    if(check != HAL_OK){
+    	printf("HOLY SHIT\n\r");
+    }
+    else{
+    	//with the register acessed, write the new value (byte from converted speed)
+    	HAL_I2C_Master_Transmit(&hi2c1, drv_Addr, &writeValue, 1, HAL_MAX_DELAY);
+    	printf("NICE");
+    }
 
 }
 /* USER CODE END PFP */
